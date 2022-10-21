@@ -1,0 +1,21 @@
+.input {
+    padding: 12px;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(47px * 10);
+    overflow-y: scroll;
+}
+
+.item {
+    padding: 12px;
+    cursor: pointer;
+    transition: background-color 250ms linear, color 250ms linear;
+
+    &Active {
+        color: var(--main-light-cl);
+        background-color: var(--accent-cl);
+    }
+}

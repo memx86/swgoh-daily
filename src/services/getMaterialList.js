@@ -3,16 +3,16 @@ import { getData } from './getData';
 export const getMaterialList = async (project = {}) => {
   const options = {
     collection: 'materialList',
-    language: 'eng_us',
-    match: {
-      obtainable: true,
-    },
     project: {
+      id: 1,
+      lookupMissionList: {
+        missionIdentifier: {
+          campaignId: 1,
+          campaignMapId: 1,
+          campaignMissionId: 1,
+        },
+      },
       ...project,
-      //   baseId: 1,
-      //   nameKey: 1,
-      //   descKey: 1,
-      //   thumbnailName: 1,
     },
   };
 

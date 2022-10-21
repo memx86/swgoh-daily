@@ -10,11 +10,11 @@ export const getUnitsList = async (project = {}) => {
       obtainableTime: 0,
     },
     project: {
-      ...project,
       baseId: 1,
       nameKey: 1,
       descKey: 1,
       thumbnailName: 1,
+      ...project,
     },
   };
 
