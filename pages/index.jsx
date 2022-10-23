@@ -15,10 +15,12 @@ import {
   getUnitShardsData,
   getFirebaseData,
   normalizeArray,
+  getLocationsAndTries,
 } from '../src/helpers';
 
 import Layout from '../src/components/Layout';
 import DailiesList from '../src/components/DailiesList';
+import AddDaily from '../src/components/AddDaily';
 
 export const getStaticProps = async () => {
   await login();
@@ -61,8 +63,7 @@ const Home = props => {
     [characters],
   );
 
-  const addDaily = (_, option) => {
-    const baseId = option?.value;
+  const addDaily = baseId => {
     if (!baseId) return;
     addDoc(dailiesCollection, {
       baseId,
@@ -88,30 +89,9 @@ const Home = props => {
     (baseId, tries = {}) => {
       const character = characters[baseId];
       const baseLocations = unitShards[baseId]?.locations;
-      const notStaleTries = {};
+      const locationsAndTries = getLocationsAndTries(baseLocations, tries);
 
-      const locations =
-        baseLocations?.map((location, idx) => {
-          const currentTry = tries[idx] ?? {};
-          const today = Date.now();
-          const updated = currentTry.updatedAt ?? 0;
-
-          const isLessThanDay = today - updated < 1000 * 60 * 60 * 24;
-          const isFresh =
-            isLessThanDay &&
-            new Date(today).getDate() === new Date(updated).getDate();
-
-          const freshValue = isFresh ? currentTry.value : 0;
-
-          notStaleTries[idx] = {
-            value: freshValue ?? 0,
-          };
-          return {
-            ...location,
-          };
-        }) ?? [];
-
-      return { ...character, locations, tries: notStaleTries };
+      return { ...character, ...locationsAndTries };
     },
     [characters, unitShards],
   );
@@ -128,26 +108,13 @@ const Home = props => {
   return (
     <Layout>
       <Box component={'section'}>
-        <Container>
+        <Container maxWidth="sm">
           <DailiesList
             dailies={dailiesList}
             deleteDaily={deleteDaily}
             updateDaily={updateDaily}
           />
-          <Autocomplete
-            onChange={addDaily}
-            options={options}
-            sx={{ width: 300 }}
-            renderInput={params => <TextField {...params} label="Character" />}
-            isOptionEqualToValue={(option, value) =>
-              option.value === value.value
-            }
-            selectOnFocus
-            clearOnBlur
-            clearOnEscape
-            handleHomeEndKeys
-            openOnFocus
-          />
+          <AddDaily addDaily={addDaily} options={options} />
         </Container>
       </Box>
     </Layout>

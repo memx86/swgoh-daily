@@ -11,6 +11,7 @@ import {
 import PropTypes from 'prop-types';
 
 import { BASE_IMG_URL } from '../constants/BASE_IMG_URL';
+import { ENCOUNTERS } from '../helpers';
 
 import DeleteButton from './DeleteButton';
 import Tries from './Tries';
@@ -19,7 +20,14 @@ const DailiesList = ({ dailies, deleteDaily, updateDaily }) => {
   return (
     <List>
       {dailies?.map(({ id, nameKey, thumbnailName, locations, tries }) => (
-        <ListItem key={id} disablePadding>
+        <ListItem
+          key={id}
+          disablePadding
+          sx={{
+            borderBottom: '1px solid gray',
+            minHeight: '5.55rem',
+          }}
+        >
           <DeleteButton handleDelete={() => deleteDaily(id)} />
           <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center' }}>
             <Avatar alt={nameKey} src={`${BASE_IMG_URL}${thumbnailName}.png`} />
@@ -31,17 +39,27 @@ const DailiesList = ({ dailies, deleteDaily, updateDaily }) => {
                 ({ encounter, nodeTier, nodeLetter, maxRetry }, idx) => (
                   <ListItem
                     key={`${nodeTier}${nodeLetter}`}
-                    sx={{ justifyContent: 'space-between' }}
+                    sx={{
+                      justifyContent: 'space-between',
+                      '&:not(:last-of-type)': {
+                        borderBottom: '1px solid gray',
+                      },
+                    }}
                   >
                     <Typography>
                       {nodeTier}
                       {nodeLetter} {encounter}
                     </Typography>
-                    <Tries
-                      tries={tries[idx].value ?? 0}
-                      maxRetry={maxRetry}
-                      setTries={payload => updateDaily({ id, idx, payload })}
-                    />
+
+                    {encounter !== ENCOUNTERS.C01H ? (
+                      <Tries
+                        tries={tries[idx].value ?? 0}
+                        maxRetry={maxRetry}
+                        setTries={payload => updateDaily({ id, idx, payload })}
+                      />
+                    ) : (
+                      <Box sx={{ height: '3.5rem' }}></Box>
+                    )}
                   </ListItem>
                 ),
               )}
@@ -49,7 +67,6 @@ const DailiesList = ({ dailies, deleteDaily, updateDaily }) => {
           ) : (
             <Box flexBasis={'75%'}></Box>
           )}
-          <Divider component="div" />
         </ListItem>
       ))}
     </List>

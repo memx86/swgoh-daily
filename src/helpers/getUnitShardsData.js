@@ -1,4 +1,4 @@
-const ENCOUNTERS = {
+export const ENCOUNTERS = {
   C01L: 'Light side battles (hard)',
   C01D: 'Dark side battles (hard)',
   C01H: 'Cantina battles',
@@ -57,7 +57,7 @@ export const getUnitShardsData = materials =>
             encounter: ENCOUNTERS[campaignId] ?? campaignId,
             nodeTier,
             nodeLetter: getNodeLetter(nodeTier, campaignMissionId),
-            maxRetry: 5,
+            maxRetry: ENCOUNTERS[campaignId] !== ENCOUNTERS.C01H ? 5 : 0,
           };
         });
 
