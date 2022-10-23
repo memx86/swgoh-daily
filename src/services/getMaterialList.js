@@ -16,6 +16,6 @@ export const getMaterialList = async (project = {}) => {
     },
   };
 
-  const units = await getData(options);
-  return units;
+  const materials = await getData(options);
+  return materials;
 };

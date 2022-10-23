@@ -57,6 +57,7 @@ export const getUnitShardsData = materials =>
             encounter: ENCOUNTERS[campaignId] ?? campaignId,
             nodeTier,
             nodeLetter: getNodeLetter(nodeTier, campaignMissionId),
+            maxRetry: 5,
           };
         });
 

@@ -1,2 +1,5 @@
 export const getOptionsFromCharacters = characters =>
-  characters.map(({ baseId, nameKey }) => ({ label: nameKey, value: baseId }));
+  Object.values(characters).map(({ baseId, nameKey }) => ({
+    label: nameKey,
+    value: baseId,
+  }));

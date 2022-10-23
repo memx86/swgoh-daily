@@ -1,12 +1,12 @@
-import Container from './Container';
-
-import s from '../styles/components/Header.module.scss';
+import { Typography, Container, Box } from '@mui/material';
 
 const Header = () => {
   return (
-    <header className={s.header}>
-      <Container>Header</Container>
-    </header>
+    <Box component={'header'}>
+      <Container>
+        <Typography></Typography>
+      </Container>
+    </Box>
   );
 };
 
