@@ -9,6 +9,7 @@ import {
   getDoc,
 } from 'firebase/firestore';
 import { Container, Box } from '@mui/material';
+import { toast } from 'react-toastify';
 
 import { dailiesCollection } from '../src/db';
 import {
@@ -26,16 +27,25 @@ import { useUser } from '../src/hooks';
 import Layout from '../src/components/Layout';
 import DailiesList from '../src/components/DailiesList';
 import AddDaily from '../src/components/AddDaily';
+import FullScreenLoader from '../src/components/FullScreenLoader';
 
 const Home = () => {
   const [dailies, setDailies] = useState([]);
   const [characters, setCharacters] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const { uid } = useUser();
 
   useEffect(() => {
     (async () => {
-      const characters = await getCharactersWithShardsProps();
-      setCharacters(characters);
+      setIsLoading(true);
+      try {
+        const characters = await getCharactersWithShardsProps();
+        setCharacters(characters);
+      } catch (error) {
+        toast.error("Can't get characters");
+      } finally {
+        setIsLoading(false);
+      }
     })();
   }, []);
 
@@ -57,7 +67,10 @@ const Home = () => {
   );
 
   const addDaily = baseId => {
-    if (!baseId) return;
+    if (!baseId) {
+      toast.error('No character id');
+      return;
+    }
     addDoc(dailiesCollection, {
       baseId,
       uid,
@@ -67,7 +80,10 @@ const Home = () => {
   const deleteDaily = async id => {
     const docToDelete = getDailiesDocById(id);
     const doc = await getDoc(docToDelete);
-    if (doc.data().uid !== uid) return;
+    if (doc.data().uid !== uid) {
+      toast.error('Not yours to delete');
+      return;
+    }
 
     deleteDoc(docToDelete);
   };
@@ -75,7 +91,10 @@ const Home = () => {
   const updateDaily = async ({ id, idx, payload }) => {
     const docToUpdate = getDailiesDocById(id);
     const doc = await getDoc(docToUpdate);
-    if (doc.data().uid !== uid) return;
+    if (doc.data().uid !== uid) {
+      toast.error('Not yours to update');
+      return;
+    }
 
     const prevTries = dailies.find(daily => daily.id === id)?.tries ?? {};
     const tries = {
@@ -104,6 +123,8 @@ const Home = () => {
       })),
     [dailies, getCharacterData],
   );
+
+  if (isLoading) return <FullScreenLoader />;
 
   return (
     <Layout>

@@ -2,6 +2,8 @@ import Head from 'next/head';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider } from '@emotion/react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import PropTypes from 'prop-types';
 
 import theme from '../src/config/theme';
@@ -56,6 +58,18 @@ const App = props => {
         <UserContext.Provider value={{ user, setUser }}>
           <CssBaseline />
           <Component {...pageProps} />
+          <ToastContainer
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
         </UserContext.Provider>
       </ThemeProvider>
     </CacheProvider>

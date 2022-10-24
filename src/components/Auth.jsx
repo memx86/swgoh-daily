@@ -1,6 +1,7 @@
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Container, TextField, Typography } from '@mui/material';
+import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 
 import {
@@ -14,6 +15,8 @@ import { FIELDS } from '../constants';
 
 import Link from './Link';
 import Form from './Form';
+import { useState } from 'react';
+import FullScreenLoader from './FullScreenLoader';
 
 export const TYPES = {
   LOGIN: 'login',
@@ -43,6 +46,7 @@ const Auth = ({ type = TYPES.LOGIN }) => {
   const schema = isRegister
     ? registerFormValidationSchema
     : loginFormValidationSchema;
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     control,
@@ -56,11 +60,19 @@ const Auth = ({ type = TYPES.LOGIN }) => {
   const onSubmitAction = isRegister ? registerUser : loginUser;
 
   const onSubmit = async data => {
-    await onSubmitAction(data);
+    setIsLoading(true);
+    try {
+      await onSubmitAction(data);
+    } catch (error) {
+      toast.error(`Can't ${type}`);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <Box component="section">
+      {isLoading && <FullScreenLoader />}
       <Container maxWidth="sm">
         <Typography
           variant="h4"

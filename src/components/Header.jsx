@@ -8,7 +8,7 @@ const Header = () => {
   return (
     <Box component={'header'}>
       <Container>
-        <Typography>
+        <Typography textAlign="right">
           {uid && (
             <Button onClick={logoutUser} type="button" variant="outlined">
               Logout
