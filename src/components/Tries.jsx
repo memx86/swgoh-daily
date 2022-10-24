@@ -18,7 +18,10 @@ const Tries = ({ tries, maxRetry, setTries }) => {
   };
 
   return (
-    <FormControl sx={{ width: '4rem' }} variant="outlined">
+    <FormControl
+      sx={{ minWidth: '3.75rem', maxWidth: '3.75rem' }}
+      variant="outlined"
+    >
       <OutlinedInput
         value={value}
         onChange={onChange}
@@ -32,6 +35,7 @@ const Tries = ({ tries, maxRetry, setTries }) => {
           min: 0,
           max: maxRetry,
         }}
+        sx={{ fontSize: '0.8rem' }}
       />
     </FormControl>
   );
