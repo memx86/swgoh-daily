@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const login = async () => {
+export const loginApp = async () => {
   const USERNAME = process.env.NAME;
   const PASSWORD = process.env.PASSWORD;
   const CLIENT_ID = process.env.CLIENT_ID;

@@ -8,6 +8,8 @@ import {
   loginFormValidationSchema,
 } from '../validation';
 
+import { loginUser, registerUser } from '../services';
+
 import { FIELDS } from '../constants';
 
 import Link from './Link';
@@ -51,7 +53,11 @@ const Auth = ({ type = TYPES.LOGIN }) => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = data => console.log(data);
+  const onSubmitAction = isRegister ? registerUser : loginUser;
+
+  const onSubmit = async data => {
+    await onSubmitAction(data);
+  };
 
   return (
     <Box component="section">
