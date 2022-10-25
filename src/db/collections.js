@@ -2,7 +2,7 @@ import { collection } from 'firebase/firestore';
 
 import { db } from './firebaseConfig';
 
-const COLLECTIONS = {
+export const COLLECTIONS = {
   DAILIES: 'dailies',
   CHARACTERS: 'characters',
 };

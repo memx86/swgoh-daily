@@ -27,33 +27,28 @@ import { useUser } from '../src/hooks';
 import Layout from '../src/components/Layout';
 import DailiesList from '../src/components/DailiesList';
 import AddDaily from '../src/components/AddDaily';
-import FullScreenLoader from '../src/components/FullScreenLoader';
 
-const Home = () => {
+export const getStaticProps = async () => {
+  const characters = await getCharactersWithShardsProps();
+  return {
+    props: {
+      characters,
+    },
+    revalidate: 60 * 60 * 24,
+  };
+};
+
+const Home = ({ characters = {} }) => {
   const [dailies, setDailies] = useState([]);
-  const [characters, setCharacters] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
   const { uid } = useUser();
-
-  useEffect(() => {
-    (async () => {
-      setIsLoading(true);
-      try {
-        const characters = await getCharactersWithShardsProps();
-        setCharacters(characters);
-      } catch (error) {
-        toast.error("Can't get characters");
-      } finally {
-        setIsLoading(false);
-      }
-    })();
-  }, []);
 
   useEffect(() => {
     const dailiesQuery = query(dailiesCollection, where('uid', '==', uid));
 
-    const dailiesSubscription = onSnapshot(dailiesQuery, data =>
-      setDailies(data.docs.map(getFirebaseData)),
+    const dailiesSubscription = onSnapshot(
+      dailiesQuery,
+      data => setDailies(data.docs.map(getFirebaseData)),
+      () => uid && toast.error("Can't update characters from server"),
     );
 
     return () => {
@@ -123,8 +118,6 @@ const Home = () => {
       })),
     [dailies, getCharacterData],
   );
-
-  if (isLoading) return <FullScreenLoader />;
 
   return (
     <Layout>

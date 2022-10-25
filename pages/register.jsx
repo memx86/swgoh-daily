@@ -1,5 +1,5 @@
-import Auth, { TYPES } from '../src/components/Auth';
 import Layout from '../src/components/Layout';
+import Auth, { TYPES } from '../src/components/Auth';
 
 const RegisterPage = () => {
   return (

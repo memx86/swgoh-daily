@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider } from '@emotion/react';
@@ -12,10 +14,9 @@ import createEmotionCache from '../src/config/createEmotionCache';
 import { UserContext } from '../src/context';
 
 import '../src/services/axios';
-import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../src/db';
-import { useRouter } from 'next/router';
+import FullScreenLoader from '../src/components/FullScreenLoader';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -25,6 +26,23 @@ const App = props => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   const [user, setUser] = useState(initialState);
   const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    const start = () => setIsLoading(true);
+    const end = () => setIsLoading(false);
+
+    router.events.on('routeChangeStart', start);
+    router.events.on('routeChangeComplete', end);
+    router.events.on('routeChangeError', end);
+
+    return () => {
+      router.events.off('routeChangeStart', start);
+      router.events.off('routeChangeComplete', end);
+      router.events.off('routeChangeError', end);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const onChangeUser = user => {
@@ -57,7 +75,7 @@ const App = props => {
       <ThemeProvider theme={theme}>
         <UserContext.Provider value={{ user, setUser }}>
           <CssBaseline />
-          <Component {...pageProps} />
+          {isLoading ? <FullScreenLoader /> : <Component {...pageProps} />}
           <ToastContainer
             position="top-center"
             autoClose={5000}

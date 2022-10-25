@@ -1,5 +1,5 @@
-import { charactersCollection } from '../db';
+import { COLLECTIONS } from '../db';
 import { getDocById } from './getDocById';
 
 export const getCachedCharactersById = id =>
-  getDocById(charactersCollection, id);
+  getDocById(COLLECTIONS.CHARACTERS, id);

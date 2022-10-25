@@ -7,12 +7,15 @@ import {
   DialogContentText,
   DialogActions,
   Button,
+  useTheme,
+  Tooltip,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import PropTypes from 'prop-types';
 
 const DeleteButton = ({ handleDelete }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const theme = useTheme();
 
   const openAlert = () => setIsOpen(true);
   const closeAlert = () => setIsOpen(false);
@@ -24,13 +27,15 @@ const DeleteButton = ({ handleDelete }) => {
 
   return (
     <>
-      <ListItemButton
-        sx={{ padding: 0, borderRadius: '50%' }}
-        aria-label="delete"
-        onClick={openAlert}
-      >
-        <CloseIcon />
-      </ListItemButton>
+      <Tooltip title="Delete">
+        <ListItemButton
+          sx={{ padding: 0, borderRadius: '50%' }}
+          aria-label="delete"
+          onClick={openAlert}
+        >
+          <CloseIcon sx={{ color: theme.palette.error.main }} />
+        </ListItemButton>
+      </Tooltip>
       <Dialog
         open={isOpen}
         onClose={closeAlert}

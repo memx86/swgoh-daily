@@ -5,7 +5,12 @@ import Header from './Header';
 
 const Layout = ({ children }) => {
   return (
-    <Box display={'flex'} flexDirection={'column'} minHeight={'100vh'}>
+    <Box
+      display={'flex'}
+      flexDirection={'column'}
+      minHeight={'100vh'}
+      pt={'4rem'}
+    >
       <Header />
       <Box component={'main'} flexGrow={1}>
         {children}
