@@ -26,6 +26,16 @@ const NavBar = () => {
             Dailies
           </Link>
         </Item>
+        <Item>
+          <Link color={theme.palette.primary.contrastText} href="/lightside">
+            Light Side
+          </Link>
+        </Item>
+        <Item>
+          <Link color={theme.palette.primary.contrastText} href="/darkside">
+            Dark Side
+          </Link>
+        </Item>
       </List>
     </Box>
   );

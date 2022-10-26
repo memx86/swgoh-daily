@@ -3,6 +3,8 @@ export const ENCOUNTERS = {
   C01D: 'Dark side battles (hard)',
   C01H: 'Cantina battles',
   C01SP: 'Fleet battles',
+  LIGHT: 'C01L',
+  DARK: 'C01D',
 };
 
 const getNodeLetter = ({ campaignId, nodeTier, campaignMissionId }) => {
