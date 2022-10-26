@@ -5,7 +5,22 @@ export const ENCOUNTERS = {
   C01SP: 'Fleet battles',
 };
 
-const getNodeLetter = (nodeTier, campaignMissionId) => {
+const getNodeLetter = ({ campaignId, nodeTier, campaignMissionId }) => {
+  if (campaignId === 'C01SP') {
+    switch (campaignMissionId) {
+      case 'Mi01':
+        return 'A';
+      case 'Mi03':
+        return 'B';
+      case 'Mi05':
+        return 'C';
+      case 'Mi06':
+        return 'D';
+      default:
+        return campaignMissionId;
+    }
+  }
+
   if (nodeTier <= 3) {
     switch (campaignMissionId) {
       case 'Mi02':
@@ -46,8 +61,8 @@ export const getUnitShardsData = materials =>
       const [, ...idArr] = material.id.split('_');
       const id = idArr.join('');
       const missionLookupList = material?.lookupMissionList
-        .filter(
-          ({ missionIdentifier }) => missionIdentifier.campaignId !== 'EVENTS',
+        .filter(({ missionIdentifier }) =>
+          Object.keys(ENCOUNTERS).includes(missionIdentifier.campaignId),
         )
         .map(({ missionIdentifier }) => {
           const { campaignId, campaignMapId, campaignMissionId } =
@@ -56,7 +71,11 @@ export const getUnitShardsData = materials =>
           return {
             encounter: ENCOUNTERS[campaignId] ?? campaignId,
             nodeTier,
-            nodeLetter: getNodeLetter(nodeTier, campaignMissionId),
+            nodeLetter: getNodeLetter({
+              campaignId,
+              nodeTier,
+              campaignMissionId,
+            }),
             maxRetry: ENCOUNTERS[campaignId] !== ENCOUNTERS.C01H ? 5 : 0,
           };
         });
