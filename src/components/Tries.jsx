@@ -1,9 +1,15 @@
-import { useState } from 'react';
-import { FormControl, InputAdornment, OutlinedInput } from '@mui/material';
+import { useMemo, useState } from 'react';
+import {
+  FormControl,
+  InputAdornment,
+  OutlinedInput,
+  useTheme,
+} from '@mui/material';
 import PropTypes from 'prop-types';
 
 const Tries = ({ tries, maxRetry, setTries }) => {
   const [value, setValue] = useState(tries);
+  const theme = useTheme();
 
   const onChange = e => {
     const value = Number(e.target.value);
@@ -16,6 +22,12 @@ const Tries = ({ tries, maxRetry, setTries }) => {
     if (value === tries) return;
     setTries(value);
   };
+
+  const bgColor = useMemo(() => {
+    if (value === maxRetry) return theme.palette.success.light;
+    if (value > 0) return theme.palette.info.light;
+    return 'transparent';
+  }, [value, maxRetry, theme.palette.success.light, theme.palette.info.light]);
 
   return (
     <FormControl
@@ -35,7 +47,10 @@ const Tries = ({ tries, maxRetry, setTries }) => {
           min: 0,
           max: maxRetry,
         }}
-        sx={{ fontSize: '0.8rem' }}
+        sx={{
+          fontSize: '0.8rem',
+          backgroundColor: bgColor,
+        }}
       />
     </FormControl>
   );

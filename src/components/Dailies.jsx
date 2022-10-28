@@ -64,9 +64,6 @@ const Dailies = ({ characters = {}, type = DAILIES_TYPES.ALL }) => {
       toast.error('No character id');
       return;
     }
-    const encounters = characters[baseId].locations.map(
-      ({ encounter }) => encounter,
-    );
 
     addDoc(collection, {
       baseId,
@@ -75,7 +72,7 @@ const Dailies = ({ characters = {}, type = DAILIES_TYPES.ALL }) => {
   };
 
   const deleteDaily = async id => {
-    const docToDelete = getDocById(id, collectionName);
+    const docToDelete = getDocById(collectionName, id);
     const doc = await getDoc(docToDelete);
     if (doc.data().uid !== uid) {
       toast.error('Not yours to delete');
@@ -86,7 +83,7 @@ const Dailies = ({ characters = {}, type = DAILIES_TYPES.ALL }) => {
   };
 
   const updateDaily = async ({ id, idx, payload }) => {
-    const docToUpdate = getDocById(id, collectionName);
+    const docToUpdate = getDocById(collectionName, id);
     const doc = await getDoc(docToUpdate);
     if (doc.data().uid !== uid) {
       toast.error('Not yours to update');
