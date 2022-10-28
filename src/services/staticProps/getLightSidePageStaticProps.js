@@ -1,13 +1,6 @@
 import { ENCOUNTERS } from '../../helpers';
-import { getCharactersWithShardsProps } from '../getCharactersWithShardsProps';
+import { getCharactersStatisProps } from './getCharactersStatisProps';
 
-export const getLightSidePageStaticProps = async () => {
-  const characters =
-    (await getCharactersWithShardsProps(ENCOUNTERS.LIGHT)) ?? {};
-  return {
-    props: {
-      characters,
-    },
-    revalidate: 60 * 60 * 24,
-  };
-};
+export const getLightSidePageStaticProps = getCharactersStatisProps(
+  ENCOUNTERS.LIGHT,
+);

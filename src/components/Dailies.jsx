@@ -11,14 +11,14 @@ import {
 import { Container, Box } from '@mui/material';
 import { toast } from 'react-toastify';
 
-import { dailiesCollection } from '../db';
-import { getDailiesDocById } from '../services';
+import { getDocById } from '../services';
 import {
   getOptionsFromCharacters,
   getFirebaseData,
   getLocationsAndTries,
-  getCharacterEncountersType,
+  getCollectionFromDailyType,
 } from '../helpers';
+import { DAILIES_TYPES } from '../constants';
 
 import { useUser } from '../hooks';
 
@@ -26,23 +26,19 @@ import Layout from './Layout';
 import DailiesList from './DailiesList';
 import AddDaily from './AddDaily';
 
-import { DAILIES_TYPES } from '../constants';
-``;
-
 const Dailies = ({ characters = {}, type = DAILIES_TYPES.ALL }) => {
   const [dailies, setDailies] = useState([]);
   const { uid } = useUser();
 
+  const { collection, collectionName } = useMemo(
+    () => getCollectionFromDailyType(type),
+    [type],
+  );
+
   useEffect(() => {
     const queryConstrains = [where('uid', '==', uid)];
-    if (type === DAILIES_TYPES.LIGHTSIDE) {
-      queryConstrains.push(where('type', '!=', DAILIES_TYPES.DARKSIDE));
-    }
-    if (type === DAILIES_TYPES.DARKSIDE) {
-      queryConstrains.push(where('type', '!=', DAILIES_TYPES.LIGHTSIDE));
-    }
 
-    const dailiesQuery = query(dailiesCollection, ...queryConstrains);
+    const dailiesQuery = query(collection, ...queryConstrains);
 
     const dailiesSubscription = onSnapshot(
       dailiesQuery,
@@ -56,7 +52,7 @@ const Dailies = ({ characters = {}, type = DAILIES_TYPES.ALL }) => {
     return () => {
       dailiesSubscription();
     };
-  }, [type, uid]);
+  }, [collection, uid]);
 
   const options = useMemo(
     () => getOptionsFromCharacters(characters),
@@ -71,17 +67,15 @@ const Dailies = ({ characters = {}, type = DAILIES_TYPES.ALL }) => {
     const encounters = characters[baseId].locations.map(
       ({ encounter }) => encounter,
     );
-    const type = getCharacterEncountersType(encounters);
 
-    addDoc(dailiesCollection, {
+    addDoc(collection, {
       baseId,
       uid,
-      type,
     });
   };
 
   const deleteDaily = async id => {
-    const docToDelete = getDailiesDocById(id);
+    const docToDelete = getDocById(id, collectionName);
     const doc = await getDoc(docToDelete);
     if (doc.data().uid !== uid) {
       toast.error('Not yours to delete');
@@ -92,7 +86,7 @@ const Dailies = ({ characters = {}, type = DAILIES_TYPES.ALL }) => {
   };
 
   const updateDaily = async ({ id, idx, payload }) => {
-    const docToUpdate = getDailiesDocById(id);
+    const docToUpdate = getDocById(id, collectionName);
     const doc = await getDoc(docToUpdate);
     if (doc.data().uid !== uid) {
       toast.error('Not yours to update');
@@ -131,12 +125,12 @@ const Dailies = ({ characters = {}, type = DAILIES_TYPES.ALL }) => {
     <Layout>
       <Box component={'section'}>
         <Container maxWidth="sm">
+          <AddDaily addDaily={addDaily} options={options} />
           <DailiesList
             dailies={dailiesList}
             deleteDaily={deleteDaily}
             updateDaily={updateDaily}
           />
-          <AddDaily addDaily={addDaily} options={options} />
         </Container>
       </Box>
     </Layout>

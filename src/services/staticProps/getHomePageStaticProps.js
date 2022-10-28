@@ -1,11 +1,3 @@
-import { getCharactersWithShardsProps } from '../getCharactersWithShardsProps';
+import { getCharactersStatisProps } from './getCharactersStatisProps';
 
-export const getHomePageStaticProps = async () => {
-  const characters = (await getCharactersWithShardsProps()) ?? {};
-  return {
-    props: {
-      characters,
-    },
-    revalidate: 60 * 60 * 24,
-  };
-};
+export const getHomePageStaticProps = getCharactersStatisProps();

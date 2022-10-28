@@ -2,7 +2,7 @@ export * from './loginApp';
 
 export * from './getUnitsList';
 export * from './getMaterialList';
-export * from './getDailiesDocById';
+export * from './getDocById';
 export * from './getCharactersUnitShards';
 
 export * from './createCachedCharacters';
