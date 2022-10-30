@@ -111,10 +111,14 @@ const Dailies = ({ characters = {}, type = DAILIES_TYPES.ALL }) => {
 
   const dailiesList = useMemo(
     () =>
-      dailies.map(({ id, baseId, tries }) => ({
-        ...getCharacterData(baseId, tries),
-        id,
-      })),
+      dailies
+        .map(({ id, baseId, tries }) => ({
+          ...getCharacterData(baseId, tries),
+          id,
+        }))
+        .sort(
+          (a, b) => a.locations?.at(0).nodeTier - b.locations?.at(0).nodeTier,
+        ),
     [dailies, getCharacterData],
   );
 
