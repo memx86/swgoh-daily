@@ -58,6 +58,10 @@ const getNodeLetter = ({ campaignId, nodeTier, campaignMissionId }) => {
         return 'C';
       case 'Mi06':
         return 'D';
+      case 'Mi08':
+        return 'E';
+      case 'Mi09':
+        return 'F';
       default:
         return campaignMissionId;
     }
