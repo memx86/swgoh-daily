@@ -117,7 +117,7 @@ const Dailies = ({ characters = {}, type = DAILIES_TYPES.ALL }) => {
           id,
         }))
         .sort(
-          (a, b) => a.locations?.at(0).nodeTier - b.locations?.at(0).nodeTier,
+          (a, b) => a.locations?.at(0)?.nodeTier - b.locations?.at(0)?.nodeTier,
         ),
     [dailies, getCharacterData],
   );

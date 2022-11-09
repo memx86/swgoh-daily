@@ -160,7 +160,8 @@ export const getUnitShardsData = materials =>
         .map(({ missionIdentifier }) => {
           const { campaignId, campaignMapId, campaignMissionId } =
             missionIdentifier;
-          const nodeTier = campaignMapId && Number(campaignMapId[2]);
+          const nodeTier =
+            (campaignMapId && Number(campaignMapId?.at(2))) ?? 'none';
           return {
             encounter: ENCOUNTERS[campaignId] ?? campaignId,
             nodeTier,
