@@ -107,12 +107,11 @@ const Dailies = ({ characters = {}, type = DAILIES_TYPES.ALL }) => {
       const locationsAndTries = getLocationsAndTries({
         locations: baseLocations,
         tries,
-        timeOffset,
       });
 
       return { ...character, ...locationsAndTries };
     },
-    [characters, timeOffset],
+    [characters],
   );
 
   const dailiesList = useMemo(
