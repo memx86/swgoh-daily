@@ -1,10 +1,10 @@
-export const getLocationsAndTries = (locations, tries) => {
+export const getLocationsAndTries = ({ locations, tries, timeOffset = 0 }) => {
   const freshedTries = {};
 
   locations?.forEach((_, idx) => {
     const currentTry = tries[idx] ?? {};
     const hour = 1000 * 60 * 60;
-    const today = Date.now() + 1 * hour;
+    const today = Date.now() + timeOffset * hour;
     const updated = currentTry.updatedAt ?? 0;
 
     const isLessThanDay = today - updated < hour * 24;

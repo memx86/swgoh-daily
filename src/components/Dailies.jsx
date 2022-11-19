@@ -28,7 +28,7 @@ import AddDaily from './AddDaily';
 
 const Dailies = ({ characters = {}, type = DAILIES_TYPES.ALL }) => {
   const [dailies, setDailies] = useState([]);
-  const { uid } = useUser();
+  const { uid, timeOffset } = useUser();
 
   const { collection, collectionName } = useMemo(
     () => getCollectionFromDailyType(type),
@@ -91,9 +91,11 @@ const Dailies = ({ characters = {}, type = DAILIES_TYPES.ALL }) => {
     }
 
     const prevTries = dailies.find(daily => daily.id === id)?.tries ?? {};
+    const hour = 1000 * 60 * 60;
+    const updatedAt = Date.now() + timeOffset * hour;
     const tries = {
       ...prevTries,
-      [idx]: { value: payload, updatedAt: Date.now() },
+      [idx]: { value: payload, updatedAt },
     };
     updateDoc(docToUpdate, { tries });
   };
@@ -102,11 +104,15 @@ const Dailies = ({ characters = {}, type = DAILIES_TYPES.ALL }) => {
     (baseId, tries = {}) => {
       const character = characters[baseId] ?? {};
       const baseLocations = character?.locations ?? [];
-      const locationsAndTries = getLocationsAndTries(baseLocations, tries);
+      const locationsAndTries = getLocationsAndTries({
+        locations: baseLocations,
+        tries,
+        timeOffset,
+      });
 
       return { ...character, ...locationsAndTries };
     },
-    [characters],
+    [characters, timeOffset],
   );
 
   const dailiesList = useMemo(

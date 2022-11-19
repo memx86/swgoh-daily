@@ -6,7 +6,7 @@ import { getFilteredBySideCharacters } from '../helpers';
 
 export const getCharactersWithShardsProps = async side => {
   const cachedCharacters = await getCachedCharacters();
-  const { updatedAt = {}, characters } = cachedCharacters;
+  const { updatedAt = 0, characters } = cachedCharacters;
 
   if (!characters) {
     const newCharacters = await getCharactersUnitShards();

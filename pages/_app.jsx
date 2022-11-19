@@ -20,7 +20,7 @@ import FullScreenLoader from '../src/components/FullScreenLoader';
 
 const clientSideEmotionCache = createEmotionCache();
 
-const initialState = { uid: '' };
+const initialState = { uid: '', timeOffset: 0 };
 
 const App = props => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
