@@ -93,6 +93,7 @@ const Dailies = ({ characters = {}, type = DAILIES_TYPES.ALL }) => {
     const prevTries = dailies.find(daily => daily.id === id)?.tries ?? {};
     const hour = 1000 * 60 * 60;
     const updatedAt = Date.now() + timeOffset * hour;
+    console.log('updateValue', updatedAt);
     const tries = {
       ...prevTries,
       [idx]: { value: payload, updatedAt },
@@ -107,11 +108,12 @@ const Dailies = ({ characters = {}, type = DAILIES_TYPES.ALL }) => {
       const locationsAndTries = getLocationsAndTries({
         locations: baseLocations,
         tries,
+        timeOffset,
       });
-
+      console.log({ baseId });
       return { ...character, ...locationsAndTries };
     },
-    [characters],
+    [characters, timeOffset],
   );
 
   const dailiesList = useMemo(

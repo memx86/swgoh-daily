@@ -20,7 +20,7 @@ import FullScreenLoader from '../src/components/FullScreenLoader';
 
 const clientSideEmotionCache = createEmotionCache();
 
-const initialState = { uid: '', timeOffset: 0 };
+const initialState = { uid: '', timeOffset: 1 };
 
 const App = props => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
@@ -51,7 +51,7 @@ const App = props => {
         router.push('/login');
         return;
       }
-      setUser(user);
+      setUser({ ...user, timeOffset: initialState.timeOffset });
       router.push('/');
     };
 
